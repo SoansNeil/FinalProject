@@ -6,6 +6,6 @@
 ## Tech Stack
 <li>Frontend: React.js + Tailwind CSS</li>
 <li>Backend: Node.js + Express.js</li>
-<li>Database: PostgreSQL + PostGIS</li>
+<li>Database: MongoDB</li>
 <li>AI Integration: Open AI API</li>
 <li>Deployment: Google Cloud (GCP)</li>
