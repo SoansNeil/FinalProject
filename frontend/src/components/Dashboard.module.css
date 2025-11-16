@@ -25,6 +25,11 @@
   font-size: 1.05rem;
 }
 
+.searchSection {
+  margin-bottom: 2rem;
+  max-width: 600px;
+}
+
 .error {
   background-color: #fee;
   color: #c33;

@@ -4,6 +4,7 @@ import {
   getTeamsByRegion,
   getTeamById,
   getAllRegions,
+  searchTeams,
 } from '../controllers/teamController.js';
 
 const router = express.Router();
@@ -13,6 +14,9 @@ router.get('/map', getTeamsForMap);
 
 // Get all regions (public)
 router.get('/regions', getAllRegions);
+
+// Search teams (public)
+router.post('/search', searchTeams);
 
 // Get teams by region (public)
 router.get('/by-region', getTeamsByRegion);

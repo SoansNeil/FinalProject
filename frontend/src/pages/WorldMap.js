@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Popup, CircleMarker, GeoJSON } from 'react-leaflet';
 import L from 'leaflet';
 import apiService from '../services/apiService';
+import SearchBar from '../components/SearchBar';
 import styles from './WorldMap.module.css';
 
 const regions = {
@@ -69,6 +70,17 @@ function WorldMap() {
     }
   };
 
+  const handleSearchSelect = (team) => {
+    setSelectedTeam(team);
+    // Scroll to team info panel
+    setTimeout(() => {
+      const panel = document.querySelector('[class*="teamInfo"]');
+      if (panel) {
+        panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }, 100);
+  };
+
   if (loading) {
     return (
       <div className={styles.container}>
@@ -90,6 +102,12 @@ function WorldMap() {
       <div className={styles.header}>
         <h1>⚽ World Soccer Teams Map</h1>
         <p>Click on markers to view team details • Click regions to zoom in</p>
+        <div className={styles.searchContainer}>
+          <SearchBar 
+            onTeamSelect={handleSearchSelect}
+            placeholder="Search teams or leagues..."
+          />
+        </div>
       </div>
 
       <div className={styles.controls}>

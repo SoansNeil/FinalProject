@@ -112,3 +112,43 @@ export const getAllRegions = async (req, res) => {
     });
   }
 };
+
+export const searchTeams = async (req, res) => {
+  try {
+    const { query } = req.body;
+
+    // Validate query
+    if (!query || query.trim().length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Search query is required.',
+      });
+    }
+
+    // Create case-insensitive regex search pattern
+    const searchPattern = new RegExp(query.trim(), 'i');
+
+    // Search teams by name or league
+    const teams = await Team.find({
+      $or: [
+        { teamName: searchPattern },
+        { league: searchPattern },
+        { country: searchPattern },
+      ],
+    })
+      .select('teamId teamName country region league logo stadium')
+      .limit(15); // Limit results for performance
+
+    return res.status(200).json({
+      success: true,
+      data: teams,
+      count: teams.length,
+    });
+  } catch (error) {
+    console.error('Search teams error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to search teams.',
+    });
+  }
+};

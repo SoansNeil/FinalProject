@@ -112,6 +112,10 @@ const teamsService = {
   getAllRegions: () => {
     return apiClient.get('/teams/regions');
   },
+
+  searchTeams: (query) => {
+    return apiClient.post('/teams/search', { query });
+  },
 };
 
 export { authService, favoriteTeamsService, recentSearchesService, userPreferencesService, teamsService };

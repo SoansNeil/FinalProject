@@ -1,11 +1,14 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import RecentSearches from './RecentSearches';
 import FavoriteTeams from './FavoriteTeams';
+import SearchBar from './SearchBar';
 import styles from './Dashboard.module.css';
 
 const Dashboard = () => {
   const { user, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
 
   if (!isAuthenticated || !user) {
     return (
@@ -17,11 +20,22 @@ const Dashboard = () => {
     );
   }
 
+  const handleTeamSelect = (team) => {
+    navigate('/map');
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.welcome}>
         <h2>Welcome, {user.firstName}! 👋</h2>
         <p>Manage your favorite teams and recent searches below</p>
+      </div>
+
+      <div className={styles.searchSection}>
+        <SearchBar 
+          onTeamSelect={handleTeamSelect}
+          placeholder="Search for teams or leagues..."
+        />
       </div>
 
       <div className={styles.content}>

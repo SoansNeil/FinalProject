@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import SearchBar from './SearchBar';
 import styles from './Header.module.css';
 
 const Header = () => {
@@ -12,12 +13,23 @@ const Header = () => {
     navigate('/login');
   };
 
+  const handleHeaderTeamSelect = (team) => {
+    navigate('/map', { state: { selectedTeamId: team.teamId } });
+  };
+
   return (
     <header className={styles.header}>
       <div className={styles.container}>
         <Link to="/" className={styles.logo}>
           <h1>⚽ Soccer Teams Mapper</h1>
         </Link>
+
+        <div className={styles.searchContainer}>
+          <SearchBar
+            onTeamSelect={handleHeaderTeamSelect}
+            placeholder="Search teams or leagues..."
+          />
+        </div>
 
         <nav className={styles.nav}>
           {isAuthenticated ? (
