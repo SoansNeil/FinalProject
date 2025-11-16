@@ -30,6 +30,9 @@ const Header = () => {
               <Link to="/dashboard" className={styles.navLink}>
                 Dashboard
               </Link>
+              <Link to="/map" className={styles.navLink}>
+                Map
+              </Link>
               <Link to="/profile" className={styles.navLink}>
                 Profile
               </Link>

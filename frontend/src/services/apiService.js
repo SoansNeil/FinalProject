@@ -94,4 +94,26 @@ const userPreferencesService = {
   },
 };
 
-export { authService, favoriteTeamsService, recentSearchesService, userPreferencesService };
+const teamsService = {
+  getTeamsForMap: () => {
+    return apiClient.get('/teams/map');
+  },
+
+  getTeamsByRegion: (country, region) => {
+    return apiClient.get('/teams/by-region', {
+      params: { country, region },
+    });
+  },
+
+  getTeamById: (teamId) => {
+    return apiClient.get(`/teams/${teamId}`);
+  },
+
+  getAllRegions: () => {
+    return apiClient.get('/teams/regions');
+  },
+};
+
+export { authService, favoriteTeamsService, recentSearchesService, userPreferencesService, teamsService };
+
+export default apiClient;
