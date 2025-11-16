@@ -89,9 +89,12 @@
   margin-left: 8px;
 }
 
+
 .clearFiltersBtn:hover {
   background: #764ba2;
 }
+
+.regionBtn {
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
