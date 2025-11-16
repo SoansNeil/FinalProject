@@ -163,6 +163,20 @@ function WorldMap() {
             ✕
           </button>
           <div className={styles.teamDetails}>
+            <div className={styles.logoSection}>
+              {selectedTeam.logo ? (
+                <img
+                  src={selectedTeam.logo}
+                  alt={selectedTeam.teamName}
+                  className={styles.teamLogo}
+                  onError={(e) => {
+                    e.target.src = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23ddd%22/%3E%3Ctext x=%2250%22 y=%2250%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%23999%22 font-size=%2224%22 font-weight=%22bold%22%3E⚽%3C/text%3E%3C/svg%3E';
+                  }}
+                />
+              ) : (
+                <div className={styles.logoPlaceholder}>⚽</div>
+              )}
+            </div>
             <h2>{selectedTeam.teamName}</h2>
             <div className={styles.infoGrid}>
               <div className={styles.infoItem}>

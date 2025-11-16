@@ -135,6 +135,41 @@
   word-wrap: break-word;
 }
 
+.logoSection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.teamLogo {
+  max-width: 100px;
+  max-height: 100px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: white;
+  padding: 8px;
+}
+
+.logoPlaceholder {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f0f0f0;
+  border-radius: 8px;
+  font-size: 48px;
+  color: #999;
+  border: 2px dashed #ddd;
+}
+
 .infoGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -279,6 +314,17 @@
     grid-template-columns: 1fr;
   }
 
+  .teamLogo {
+    max-width: 80px;
+    max-height: 80px;
+  }
+
+  .logoPlaceholder {
+    width: 80px;
+    height: 80px;
+    font-size: 40px;
+  }
+
   .performanceGrid {
     grid-template-columns: 1fr 1fr;
   }
@@ -310,5 +356,21 @@
 
   .teamDetails h2 {
     font-size: 18px;
+  }
+
+  .teamLogo {
+    max-width: 70px;
+    max-height: 70px;
+  }
+
+  .logoPlaceholder {
+    width: 70px;
+    height: 70px;
+    font-size: 36px;
+  }
+
+  .logoSection {
+    margin-bottom: 16px;
+    padding-bottom: 16px;
   }
 }
