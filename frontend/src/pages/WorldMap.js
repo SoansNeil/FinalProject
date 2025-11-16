@@ -30,15 +30,44 @@ const regions = {
 
 function WorldMap() {
   const [teams, setTeams] = useState([]);
+  const [filteredTeams, setFilteredTeams] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [selectedTeam, setSelectedTeam] = useState(null);
   const [mapCenter] = useState([20, 0]);
   const [mapZoom] = useState(2);
+  const [selectedRegion, setSelectedRegion] = useState('');
+  const [selectedLeague, setSelectedLeague] = useState('');
+  const [regionOptions, setRegionOptions] = useState([]);
+  const [leagueOptions, setLeagueOptions] = useState([]);
 
   useEffect(() => {
     fetchTeamsForMap();
   }, []);
+
+  useEffect(() => {
+    // Extract unique regions and leagues from teams
+    const regionsSet = new Set();
+    const leaguesSet = new Set();
+    teams.forEach((team) => {
+      if (team.region) regionsSet.add(team.region);
+      if (team.league) leaguesSet.add(team.league);
+    });
+    setRegionOptions(Array.from(regionsSet));
+    setLeagueOptions(Array.from(leaguesSet));
+  }, [teams]);
+
+  useEffect(() => {
+    // Filter teams based on selected region and league
+    let filtered = teams;
+    if (selectedRegion) {
+      filtered = filtered.filter((team) => team.region === selectedRegion);
+    }
+    if (selectedLeague) {
+      filtered = filtered.filter((team) => team.league === selectedLeague);
+    }
+    setFilteredTeams(filtered);
+  }, [teams, selectedRegion, selectedLeague]);
 
   const fetchTeamsForMap = async () => {
     try {
@@ -110,20 +139,42 @@ function WorldMap() {
         </div>
       </div>
 
-      <div className={styles.controls}>
-        {Object.keys(regions).map((region) => (
-          <button
-            key={region}
-            className={styles.regionBtn}
-            onClick={() => handleRegionClick(region)}
-            style={{
-              borderColor: regions[region].color,
-              color: regions[region].color,
-            }}
-          >
-            {region}
-          </button>
-        ))}
+      <div className={styles.filterControls}>
+        <label className={styles.filterLabel} htmlFor="regionFilter">Region:</label>
+        <select
+          id="regionFilter"
+          className={styles.filterSelect}
+          value={selectedRegion}
+          onChange={(e) => setSelectedRegion(e.target.value)}
+        >
+          <option value="">All Regions</option>
+          {regionOptions.map((region) => (
+            <option key={region} value={region}>{region}</option>
+          ))}
+        </select>
+
+        <label className={styles.filterLabel} htmlFor="leagueFilter">League:</label>
+        <select
+          id="leagueFilter"
+          className={styles.filterSelect}
+          value={selectedLeague}
+          onChange={(e) => setSelectedLeague(e.target.value)}
+        >
+          <option value="">All Leagues</option>
+          {leagueOptions.map((league) => (
+            <option key={league} value={league}>{league}</option>
+          ))}
+        </select>
+
+        <button
+          className={styles.clearFiltersBtn}
+          onClick={() => {
+            setSelectedRegion('');
+            setSelectedLeague('');
+          }}
+        >
+          Clear Filters
+        </button>
       </div>
 
       <MapContainer
@@ -139,7 +190,7 @@ function WorldMap() {
           attribution='&copy; OpenStreetMap contributors'
         />
 
-        {teams.map((team) => (
+        {filteredTeams.map((team) => (
           <CircleMarker
             key={team._id}
             center={[team.latitude, team.longitude]}

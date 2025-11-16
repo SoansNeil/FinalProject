@@ -41,15 +41,57 @@
   justify-content: center;
 }
 
-.regionBtn {
-  padding: 8px 16px;
-  border: 2px solid;
-  border-radius: 20px;
-  background: white;
-  font-size: 13px;
+
+.filterControls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 18px 24px 8px 24px;
+  background: #fff;
+  border-bottom: 1px solid #e0e0e0;
+  align-items: center;
+  justify-content: center;
+}
+
+.filterLabel {
+  font-size: 14px;
   font-weight: 500;
+  margin-right: 6px;
+  color: #1a1a2e;
+}
+
+.filterSelect {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #bdbdbd;
+  font-size: 14px;
+  background: #f5f5f5;
+  margin-right: 12px;
+  min-width: 120px;
+  transition: border-color 0.2s;
+}
+
+.filterSelect:focus {
+  border-color: #667eea;
+  outline: none;
+}
+
+.clearFiltersBtn {
+  padding: 6px 18px;
+  border-radius: 20px;
+  background: #667eea;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background 0.2s;
+  margin-left: 8px;
+}
+
+.clearFiltersBtn:hover {
+  background: #764ba2;
+}
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
