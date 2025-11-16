@@ -1,0 +1,97 @@
+import axios from 'axios';
+
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+
+const apiClient = axios.create({
+  baseURL: API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+// Add token to requests
+apiClient.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Handle responses
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      // Token expired or invalid
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('user');
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
+);
+
+const authService = {
+  register: (email, password, firstName, lastName) => {
+    return apiClient.post('/users/register', {
+      email,
+      password,
+      firstName,
+      lastName,
+    });
+  },
+
+  login: (email, password) => {
+    return apiClient.post('/users/login', {
+      email,
+      password,
+    });
+  },
+};
+
+const favoriteTeamsService = {
+  getFavoriteTeams: (userId) => {
+    return apiClient.get(`/users/${userId}/favorites`);
+  },
+
+  addFavoriteTeam: (userId, teamId, teamName) => {
+    return apiClient.post(`/users/${userId}/favorites`, {
+      teamId,
+      teamName,
+    });
+  },
+
+  removeFavoriteTeam: (userId, teamId) => {
+    return apiClient.delete(`/users/${userId}/favorites/${teamId}`);
+  },
+};
+
+const recentSearchesService = {
+  getRecentSearches: (userId) => {
+    return apiClient.get(`/users/${userId}/searches`);
+  },
+
+  addRecentSearch: (userId, query) => {
+    return apiClient.post(`/users/${userId}/searches`, {
+      query,
+    });
+  },
+
+  clearRecentSearches: (userId) => {
+    return apiClient.delete(`/users/${userId}/searches`);
+  },
+};
+
+const userPreferencesService = {
+  getUserPreferences: (userId) => {
+    return apiClient.get(`/users/${userId}/preferences`);
+  },
+};
+
+export { authService, favoriteTeamsService, recentSearchesService, userPreferencesService };
