@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useFavoriteTeams } from '../hooks/useFavoriteTeams';
 import styles from './FavoriteTeams.module.css';
 
-const FavoriteTeams = ({ userId }) => {
+const FavoriteTeams = ({ userId, showFullList = false }) => {
   const { favoriteTeams, loading, error, addTeam, removeTeam } = useFavoriteTeams(userId);
   const [showAddForm, setShowAddForm] = useState(false);
   const [formData, setFormData] = useState({ teamId: '', teamName: '' });
   const [formError, setFormError] = useState('');
   const [addingTeam, setAddingTeam] = useState(false);
+  const [removingTeamId, setRemovingTeamId] = useState(null);
 
   const handleAddTeam = async (e) => {
     e.preventDefault();
@@ -30,15 +31,18 @@ const FavoriteTeams = ({ userId }) => {
     }
   };
 
-  const handleRemoveTeam = async (teamId) => {
+  const handleRemoveTeam = useCallback(async (teamId) => {
     if (window.confirm('Are you sure you want to remove this team from favorites?')) {
+      setRemovingTeamId(teamId);
       try {
         await removeTeam(teamId);
       } catch (err) {
         console.error('Error removing team:', err);
+      } finally {
+        setRemovingTeamId(null);
       }
     }
-  };
+  }, [removeTeam]);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -106,7 +110,10 @@ const FavoriteTeams = ({ userId }) => {
       ) : (
         <div className={styles.grid}>
           {favoriteTeams.map((team) => (
-            <div key={team._id} className={styles.teamCard}>
+            <div 
+              key={team._id} 
+              className={`${styles.teamCard} ${removingTeamId === team._id ? styles.removing : ''}`}
+            >
               <div className={styles.teamInfo}>
                 <h4 className={styles.teamName}>{team.teamName}</h4>
                 <p className={styles.teamId}>ID: {team.teamId}</p>
@@ -118,8 +125,9 @@ const FavoriteTeams = ({ userId }) => {
                 className={styles.removeBtn}
                 onClick={() => handleRemoveTeam(team._id)}
                 title="Remove from favorites"
+                disabled={removingTeamId === team._id}
               >
-                ✕
+                {removingTeamId === team._id ? '⏳' : '✕'}
               </button>
             </div>
           ))}

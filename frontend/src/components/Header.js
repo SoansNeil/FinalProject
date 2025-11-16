@@ -27,6 +27,12 @@ const Header = () => {
                   {user?.firstName} {user?.lastName}
                 </span>
               </div>
+              <Link to="/dashboard" className={styles.navLink}>
+                Dashboard
+              </Link>
+              <Link to="/profile" className={styles.navLink}>
+                Profile
+              </Link>
               <button className={styles.logoutBtn} onClick={handleLogout}>
                 Logout
               </button>

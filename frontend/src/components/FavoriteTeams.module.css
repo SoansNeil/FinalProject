@@ -144,6 +144,11 @@
   box-shadow: 0 8px 16px rgba(102, 126, 234, 0.2);
 }
 
+.teamCard.removing {
+  opacity: 0.6;
+  transform: scale(0.95);
+}
+
 .teamInfo {
   padding-right: 1.5rem;
 }
@@ -187,9 +192,14 @@
   transition: all 0.3s ease;
 }
 
-.removeBtn:hover {
+.removeBtn:hover:not(:disabled) {
   background-color: #fcc;
   transform: scale(1.1);
+}
+
+.removeBtn:disabled {
+  cursor: wait;
+  opacity: 0.7;
 }
 
 @media (max-width: 768px) {

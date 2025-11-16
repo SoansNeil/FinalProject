@@ -1,8 +1,10 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useRecentSearches } from '../hooks/useRecentSearches';
 import styles from './RecentSearches.module.css';
 
 const RecentSearches = ({ userId }) => {
+  const navigate = useNavigate();
   const { recentSearches, loading, error, clearSearches } = useRecentSearches(userId);
 
   const handleClearAll = async () => {
@@ -63,13 +65,10 @@ const RecentSearches = ({ userId }) => {
               <button
                 className={styles.searchAgainBtn}
                 onClick={() => {
-                  // This would trigger a search with the same query
-                  // Implementation depends on your app's search functionality
-                  window.dispatchEvent(
-                    new CustomEvent('searchRequested', { detail: { query: search.query } })
-                  );
+                  // Navigate to search results page with the query
+                  navigate(`/search/${encodeURIComponent(search.query)}`);
                 }}
-                title="Search again"
+                title="View search results"
               >
                 🔍
               </button>
