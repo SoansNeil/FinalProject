@@ -208,6 +208,17 @@ function WorldMap() {
             <Popup>
               <div className={styles.popupContent}>
                 <h3>{team.teamName}</h3>
+                {team.logo && (
+                  <img
+                    src={team.logo}
+                    alt={team.teamName}
+                    style={{ width: '48px', height: '48px', objectFit: 'contain', marginBottom: '8px' }}
+                    onError={(e) => { e.target.style.display = 'none'; }}
+                  />
+                )}
+                {team.description && (
+                  <p style={{ fontStyle: 'italic', marginBottom: '6px', color: '#444' }}>{team.description}</p>
+                )}
                 <p>
                   <strong>Region:</strong> {team.region}
                 </p>
@@ -216,6 +227,9 @@ function WorldMap() {
                 </p>
                 <p>
                   <strong>League:</strong> {team.league}
+                </p>
+                <p>
+                  <strong>Founded:</strong> {team.founded || 'Unknown'}
                 </p>
               </div>
             </Popup>
@@ -247,6 +261,9 @@ function WorldMap() {
               )}
             </div>
             <h2>{selectedTeam.teamName}</h2>
+            {selectedTeam.description && (
+              <p style={{ fontStyle: 'italic', marginBottom: '10px', color: '#444' }}>{selectedTeam.description}</p>
+            )}
             <div className={styles.infoGrid}>
               <div className={styles.infoItem}>
                 <span className={styles.label}>Country:</span>
