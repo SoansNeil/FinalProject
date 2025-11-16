@@ -10,6 +10,7 @@ dotenv.config();
 import authRoutes from './routes/authRoutes.js';
 import favoriteTeamsRoutes from './routes/favoriteTeamsRoutes.js';
 import recentSearchesRoutes from './routes/recentSearchesRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 
 const app = express();
 
@@ -40,6 +41,7 @@ app.get('/health', (req, res) => {
 
 // API Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
 app.use('/api/favorite-teams', favoriteTeamsRoutes);
 app.use('/api/recent-searches', recentSearchesRoutes);
 

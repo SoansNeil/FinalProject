@@ -1,0 +1,108 @@
+.settingsContainer {
+  min-height: calc(100vh - 70px);
+  padding: 40px 20px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+}
+
+.settingsWrapper {
+  max-width: 900px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.title {
+  padding: 30px 30px 20px;
+  margin: 0;
+  font-size: 28px;
+  font-weight: 600;
+  color: #1a1a2e;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.tabsContainer {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.tabs {
+  display: flex;
+  padding: 0;
+  margin: 0;
+}
+
+.tab {
+  flex: 1;
+  padding: 15px 20px;
+  border: none;
+  background: white;
+  color: #666;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-bottom: 3px solid transparent;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tab:hover:not(:disabled) {
+  background: #f5f5f5;
+  color: #1a1a2e;
+}
+
+.tab.active {
+  color: #0066cc;
+  border-bottom-color: #0066cc;
+}
+
+.tab:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.tabContent {
+  padding: 30px;
+  animation: fadeIn 0.3s ease;
+}
+
+.placeholder {
+  text-align: center;
+  padding: 40px 20px;
+  color: #999;
+  font-size: 16px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 600px) {
+  .settingsContainer {
+    padding: 20px 10px;
+  }
+
+  .settingsWrapper {
+    border-radius: 5px;
+  }
+
+  .title {
+    padding: 20px 15px 15px;
+    font-size: 22px;
+  }
+
+  .tab {
+    padding: 12px 10px;
+    font-size: 12px;
+  }
+
+  .tabContent {
+    padding: 20px;
+  }
+}

@@ -65,6 +65,28 @@ const userSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
+    profilePicture: {
+      type: String,
+      default: null,
+    },
+    changeHistory: [
+      {
+        fieldName: {
+          type: String,
+          enum: ['firstName', 'lastName', 'email', 'profilePicture'],
+        },
+        oldValue: String,
+        newValue: String,
+        changedAt: {
+          type: Date,
+          default: Date.now,
+        },
+        canRevert: {
+          type: Boolean,
+          default: true,
+        },
+      },
+    ],
     isActive: {
       type: Boolean,
       default: true,

@@ -33,6 +33,9 @@ const Header = () => {
               <Link to="/profile" className={styles.navLink}>
                 Profile
               </Link>
+              <Link to="/settings" className={styles.navLink}>
+                Settings
+              </Link>
               <button className={styles.logoutBtn} onClick={handleLogout}>
                 Logout
               </button>
