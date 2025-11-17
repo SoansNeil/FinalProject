@@ -5,12 +5,12 @@ import {
   getChangeHistory,
   revertProfileChange,
 } from '../controllers/userController.js';
-import auth from '../middleware/auth.js';
+import { protect } from '../middleware/auth.js';
 
 const router = express.Router();
 
 // All routes require authentication
-router.use(auth);
+router.use(protect);
 
 // Get user profile
 router.get('/profile', getUserProfile);
