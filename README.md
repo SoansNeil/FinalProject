@@ -9,3 +9,7 @@
 <li>Database: MongoDB</li>
 <li>AI Integration: Open AI API</li>
 <li>Deployment: Google Cloud (GCP)</li>
+
+## AI Utilization
+<p>I used AI thoroughly to help me develop the structure and code of the repository. I structured some of the files like the frontend and backend along with the docker files but most of the other files came from the chatbot developing subfiles for the prompts I was providing. It created the connections, js files, and css files for the javaScript files. The artificial intelligence also helped debug the files which caused me issues during deployment. <br>
+I am still struggling to deploy the backend through GCP b/c of an issue with the code regarding a port or an issue with the GCP not connecting with my database. Either issue I do not know how to fix and it is prohibiting me from moving onto the next step which is frontend deployment. I consulted AI to see if it could guide me in the right direction but it did not make much sense to me.</p>
