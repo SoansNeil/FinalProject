@@ -1,11 +1,5 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
-import { jest } from '@jest/globals';
-
-// Increase default Jest timeout for setup hooks because downloading
-// MongoDB binaries (used by mongodb-memory-server) can take longer
-// than Jest's default 5s on some machines / CI environments.
-jest.setTimeout(30000);
 
 let mongoServer;
 

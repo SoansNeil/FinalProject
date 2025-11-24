@@ -18,7 +18,6 @@ steps:
         '--platform', 'managed',
         '--region', 'us-central1',
         '--allow-unauthenticated',
-        '--port', '5000',
         '--set-env-vars', 'MONGODB_URI=mongodb+srv://nellysoans8_db_user:d2kXsY2WEtzeElJd@cluster0.0c0lwv7.mongodb.net/soccer-teams-mapper',
       ]
 

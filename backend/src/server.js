@@ -64,8 +64,8 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Start server (only when not running tests)
-const PORT = process.env.PORT || 5000;
+// Start server
+const PORT = process.env.PORT || 8080;
 
 const startServer = async () => {
   try {
@@ -88,10 +88,4 @@ const startServer = async () => {
   }
 };
 
-// If not in test mode, start the server immediately
-if (process.env.NODE_ENV !== 'test') {
-  startServer();
-}
-
-// Export app for testing (supertest will use this)
-export default app;
+startServer();
