@@ -1,12 +1,17 @@
 import React, { useState, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import { authService } from '../services/apiService';
+// Note: we avoid importing authService at module top-level. Tests inject a
+// mock via props; production code will dynamically require the real
+// `authService` when needed to prevent Jest from trying to parse ESM-only
+// dependencies during tests.
 import styles from './LoginForm.module.css';
 
-const LoginForm = () => {
+const LoginForm = ({ authServiceProp = null, authHook = null }) => {
   const navigate = useNavigate();
-  const { login, setAuthError } = useAuth();
+  // Allow injection of a mock auth hook for tests; fall back to real hook
+  const auth = authHook || useAuth();
+  const { login, setAuthError } = auth;
 
   const [formData, setFormData] = useState({
     email: '',
@@ -64,7 +69,22 @@ const LoginForm = () => {
     setLoading(true);
 
     try {
-      const response = await authService.login(
+      // Use injected authService when provided (tests). Otherwise dynamically
+      // require the real service; if require fails (test env), fall back to a
+      // safe stub that rejects so the error flow is exercised.
+      let service = authServiceProp;
+      if (!service) {
+        try {
+          // eslint-disable-next-line global-require
+          service = require('../services/apiService').authService;
+        } catch (e) {
+          service = {
+            login: () => Promise.reject(new Error('auth service not available')),
+          };
+        }
+      }
+
+      const response = await service.login(
         formData.email.trim(),
         formData.password
       );

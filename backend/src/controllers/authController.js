@@ -76,6 +76,14 @@ export const login = async (req, res) => {
       });
     }
 
+    // If email is not a string (e.g. an object injection attempt), reject as unauthorized
+    if (typeof email !== 'string') {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid email or password.',
+      });
+    }
+
     // Find user and include password field
     const user = await User.findOne({ email: email.toLowerCase() }).select(
       '+password'

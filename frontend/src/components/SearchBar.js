@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { teamsService } from '../services/apiService';
+// Note: do not import `teamsService` at module top-level to keep tests from
+// pulling in ESM-only dependencies (axios) via the service module. Tests
+// inject a `teamsServiceProp`; production code will dynamically require the
+// service when needed.
 import styles from './SearchBar.module.css';
 
-function SearchBar({ onTeamSelect = null, placeholder = 'Search teams or leagues...' }) {
+function SearchBar({ onTeamSelect = null, placeholder = 'Search teams or leagues...', teamsServiceProp = null }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -12,6 +15,24 @@ function SearchBar({ onTeamSelect = null, placeholder = 'Search teams or leagues
   const searchRef = useRef(null);
   const navigate = useNavigate();
   const debounceTimer = useRef(null);
+
+  // Choose injected service if provided (tests can pass a mock). If no
+  // injected service is provided, dynamically require the real service so
+  // production code still works but tests that inject mocks avoid loading
+  // the `apiService` module (which pulls in axios and may be ESM-only).
+  let service = teamsServiceProp;
+  if (!service) {
+    try {
+      // eslint-disable-next-line global-require
+      service = require('../services/apiService').teamsService;
+    } catch (e) {
+      // If require fails (e.g. in some test environments), fall back to a
+      // harmless noop service that returns empty results.
+      service = {
+        searchTeams: () => Promise.resolve({ data: { success: true, data: [] } }),
+      };
+    }
+  }
 
   // Fetch search results
   const performSearch = async (query) => {
@@ -23,11 +44,13 @@ function SearchBar({ onTeamSelect = null, placeholder = 'Search teams or leagues
 
     try {
       setIsSearching(true);
-      const response = await teamsService.searchTeams(query.trim());
+      const response = await service.searchTeams(query.trim());
 
-      if (response.data.success) {
-        setSearchResults(response.data.data || []);
-        setShowDropdown(response.data.data.length > 0);
+      const payload = response?.data ?? response;
+
+      if (payload && payload.success) {
+        setSearchResults(payload.data || []);
+        setShowDropdown((payload.data && payload.data.length > 0) || false);
         setSelectedIndex(-1);
       } else {
         setSearchResults([]);

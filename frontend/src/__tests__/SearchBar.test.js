@@ -1,24 +1,28 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import SearchBar from '../components/SearchBar';
+import { MemoryRouter } from 'react-router-dom';
 
-jest.mock('../services/apiService', () => ({
-  teamsService: {
-    searchTeams: jest.fn((query) =>
-      Promise.resolve({ data: { success: true, data: [{ _id: '1', teamName: 'Team A', league: 'League 1', country: 'Country' }] } })
-    ),
-  },
-}));
+const SearchBar = require('../components/SearchBar').default;
 
 describe('SearchBar', () => {
   test('performs search and shows results, then selects team', async () => {
+    // Create a mock teamsService and inject it via props
+    const teamsServiceMock = {
+      searchTeams: jest.fn().mockResolvedValue({ data: { success: true, data: [{ _id: '1', teamName: 'Team A', league: 'League 1', country: 'Country' }] } })
+    };
     const onTeamSelect = jest.fn();
-    render(<SearchBar onTeamSelect={onTeamSelect} />);
+
+    render(
+      <MemoryRouter>
+        <SearchBar onTeamSelect={onTeamSelect} teamsServiceProp={teamsServiceMock} />
+      </MemoryRouter>
+    );
 
     const input = screen.getByPlaceholderText(/search teams or leagues/i);
     fireEvent.change(input, { target: { value: 'Team' } });
 
-    // Wait for debounce + async
+    // Wait for debounce + async and for the mocked service to be called
+    await waitFor(() => expect(teamsServiceMock.searchTeams).toHaveBeenCalledWith('Team'), { timeout: 2000 });
     await waitFor(() => expect(screen.getByText(/team a/i)).toBeInTheDocument(), { timeout: 2000 });
 
     fireEvent.click(screen.getByText(/team a/i));

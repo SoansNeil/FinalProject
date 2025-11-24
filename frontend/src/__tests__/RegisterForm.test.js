@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import RegisterForm from '../components/RegisterForm';
+import { MemoryRouter } from 'react-router-dom';
 
 jest.mock('../hooks/useAuth', () => ({
   useAuth: () => ({
@@ -24,7 +25,11 @@ jest.mock('react-router-dom', () => ({
 
 describe('RegisterForm', () => {
   test('shows password mismatch error', async () => {
-    render(<RegisterForm />);
+    render(
+      <MemoryRouter>
+        <RegisterForm />
+      </MemoryRouter>
+    );
 
     fireEvent.change(screen.getByPlaceholderText(/john/i), {
       target: { value: 'John' },

@@ -1,21 +1,8 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import LoginForm from '../components/LoginForm';
+import { MemoryRouter } from 'react-router-dom';
 
-jest.mock('../hooks/useAuth', () => ({
-  useAuth: () => ({
-    login: jest.fn(),
-    setAuthError: jest.fn(),
-  }),
-}));
-
-jest.mock('../services/apiService', () => ({
-  authService: {
-    login: jest.fn((email, password) =>
-      Promise.resolve({ data: { token: 'token', user: { email } } })
-    ),
-  },
-}));
+const LoginForm = require('../components/LoginForm').default;
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -24,7 +11,11 @@ jest.mock('react-router-dom', () => ({
 
 describe('LoginForm', () => {
   test('shows validation errors for empty inputs', async () => {
-    render(<LoginForm />);
+    render(
+      <MemoryRouter>
+        <LoginForm authHook={{ login: jest.fn(), setAuthError: jest.fn() }} />
+      </MemoryRouter>
+    );
 
     const submit = screen.getByRole('button', { name: /log in/i });
     fireEvent.click(submit);
@@ -34,11 +25,18 @@ describe('LoginForm', () => {
   });
 
   test('calls authService and login on successful submit', async () => {
-    const { authService } = require('../services/apiService');
-    const { useAuth } = require('../hooks/useAuth');
-    const loginMock = useAuth().login;
+    const mockLogin = jest.fn();
+    const mockAuthHook = { login: mockLogin, setAuthError: jest.fn() };
 
-    render(<LoginForm />);
+    const mockAuthService = {
+      login: jest.fn().mockResolvedValue({ data: { token: 'token', user: { email: 'john@example.com' } } }),
+    };
+
+    render(
+      <MemoryRouter>
+        <LoginForm authServiceProp={mockAuthService} authHook={mockAuthHook} />
+      </MemoryRouter>
+    );
 
     fireEvent.change(screen.getByPlaceholderText(/you@example.com/i), {
       target: { value: 'john@example.com' },
@@ -49,7 +47,7 @@ describe('LoginForm', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /log in/i }));
 
-    await waitFor(() => expect(authService.login).toHaveBeenCalled());
-    expect(loginMock).toHaveBeenCalled();
+    await waitFor(() => expect(mockAuthService.login).toHaveBeenCalled());
+    expect(mockLogin).toHaveBeenCalled();
   });
 });
