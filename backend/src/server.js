@@ -64,23 +64,34 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Start server
+// Start server (only when not running tests)
 const PORT = process.env.PORT || 5000;
 
 const startServer = async () => {
   try {
-    await connectDB();
+    // Only connect to the database when not testing; tests manage their own in-memory DB
+    if (process.env.NODE_ENV !== 'test') {
+      await connectDB();
+    }
 
     // Bind to 0.0.0.0 so Cloud Run can reach it
-    app.listen(PORT, "0.0.0.0", () => {
+    const server = app.listen(PORT, '0.0.0.0', () => {
       console.log(`🚀 Server running on port ${PORT}`);
       console.log(`📍 API URL: http://localhost:${PORT}/api`);
       console.log(`🏥 Health check: http://localhost:${PORT}/health`);
     });
+
+    return server;
   } catch (error) {
     console.error('Failed to start server:', error);
     process.exit(1);
   }
 };
 
-startServer();
+// If not in test mode, start the server immediately
+if (process.env.NODE_ENV !== 'test') {
+  startServer();
+}
+
+// Export app for testing (supertest will use this)
+export default app;
