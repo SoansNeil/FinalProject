@@ -13,7 +13,7 @@ RUN npm install --production
 # Copy the rest of your app
 COPY . .
 
-EXPOSE 5000
+EXPOSE 8080
 
 # Add healthcheck for container
 HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
