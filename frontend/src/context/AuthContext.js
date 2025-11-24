@@ -4,17 +4,21 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   // Load token from localStorage on mount
   useEffect(() => {
+    const storedToken = localStorage.getItem('authToken');
     const storedUser = localStorage.getItem('user');
-    if (storedUser) {
+    if (storedToken && storedUser) {
       try {
+        setToken(storedToken);
         setUser(JSON.parse(storedUser));
       } catch (err) {
         console.error('Error loading user data:', err);
+        localStorage.removeItem('authToken');
         localStorage.removeItem('user');
       }
     }
@@ -23,19 +27,25 @@ export const AuthProvider = ({ children }) => {
 
   const login = useCallback((userData, authToken) => {
   setUser(userData);
+  setToken(authToken);
   setError(null);
+  localStorage.setItem('authToken', authToken);
   localStorage.setItem('user', JSON.stringify(userData));
   }, []);
 
   const register = useCallback((userData, authToken) => {
   setUser(userData);
+  setToken(authToken);
   setError(null);
+  localStorage.setItem('authToken', authToken);
   localStorage.setItem('user', JSON.stringify(userData));
   }, []);
 
   const logout = useCallback(() => {
   setUser(null);
+  setToken(null);
   setError(null);
+  localStorage.removeItem('authToken');
   localStorage.removeItem('user');
   }, []);
 
@@ -54,6 +64,7 @@ export const AuthProvider = ({ children }) => {
 
   const value = {
   user,
+  token,
   loading,
   error,
   login,
@@ -62,7 +73,7 @@ export const AuthProvider = ({ children }) => {
   updateUser,
   setAuthError,
   clearError,
-  isAuthenticated: !!user,
+  isAuthenticated: !!token && !!user,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

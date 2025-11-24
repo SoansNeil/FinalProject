@@ -1,7 +1,16 @@
 import User from '../models/User.js';
+import { generateToken } from '../utils/generateToken.js';
 // Removed JWT token generation
 
 export const register = async (req, res) => {
+    // Generate token
+    const token = generateToken(user._id);
+    return res.status(201).json({
+      success: true,
+      message: 'Account created successfully!',
+      token,
+      user: user.toJSON(),
+    });
   try {
     const { firstName, lastName, email, password, confirmPassword } = req.body;
 
@@ -61,6 +70,14 @@ export const register = async (req, res) => {
 };
 
 export const login = async (req, res) => {
+    // Generate token
+    const token = generateToken(user._id);
+    return res.status(200).json({
+      success: true,
+      message: 'Login successful!',
+      token,
+      user: user.toJSON(),
+    });
   try {
     const { email, password } = req.body;
 
