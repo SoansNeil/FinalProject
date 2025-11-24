@@ -21,7 +21,7 @@ jobs:
       - name: Set up gcloud SDK
         uses: google-github-actions/setup-gcloud@v1
         with:
-          project_id: ${{ secrets.GCP_PROJECT }}
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
 
       - name: Configure Docker authentication for GCR
         run: |
@@ -29,7 +29,7 @@ jobs:
 
       - name: Build and push backend image to GCR
         env:
-          GCP_PROJECT: ${{ secrets.GCP_PROJECT }}
+          GCP_PROJECT: ${{ secrets.GCP_PROJECT_ID }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
           IMAGE=gcr.io/${GCP_PROJECT}/finalproject-backend:${IMAGE_TAG}
@@ -38,7 +38,7 @@ jobs:
 
       - name: Deploy backend to Cloud Run
         env:
-          GCP_PROJECT: ${{ secrets.GCP_PROJECT }}
+          GCP_PROJECT: ${{ secrets.GCP_PROJECT_ID }}
           GCP_REGION: ${{ secrets.GCP_REGION }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
@@ -52,7 +52,7 @@ jobs:
 
       - name: Build and push frontend image to GCR
         env:
-          GCP_PROJECT: ${{ secrets.GCP_PROJECT }}
+          GCP_PROJECT: ${{ secrets.GCP_PROJECT_ID }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
           BACKEND_URL=https://finalproject-backend-${GCP_REGION}-a.run.app
@@ -62,7 +62,7 @@ jobs:
 
       - name: Deploy frontend to Cloud Run
         env:
-          GCP_PROJECT: ${{ secrets.GCP_PROJECT }}
+          GCP_PROJECT: ${{ secrets.GCP_PROJECT_ID }}
           GCP_REGION: ${{ secrets.GCP_REGION }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
