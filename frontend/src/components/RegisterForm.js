@@ -95,10 +95,10 @@ const RegisterForm = () => {
         formData.lastName.trim()
       );
 
-      const { token, user } = response.data;
+  const { user } = response.data;
 
-      // Register user in auth context
-      registerUser(user, token);
+  // Register user in auth context
+  registerUser(user);
 
       // Show success message
       setSuccessMessage('Account created successfully! Redirecting to dashboard...');

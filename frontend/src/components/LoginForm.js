@@ -89,10 +89,10 @@ const LoginForm = ({ authServiceProp = null, authHook = null }) => {
         formData.password
       );
 
-      const { token, user } = response.data;
+  const { user } = response.data;
 
-      // Login user in auth context
-      login(user, token);
+  // Login user in auth context
+  login(user);
 
       // Store "remember me" preference
       if (rememberMe) {
