@@ -55,8 +55,9 @@ jobs:
           GCP_PROJECT: ${{ secrets.GCP_PROJECT }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
+          BACKEND_URL=https://finalproject-backend-${GCP_REGION}-a.run.app
           IMAGE=gcr.io/${GCP_PROJECT}/finalproject-frontend:${IMAGE_TAG}
-          docker build -t ${IMAGE} -f frontend/Dockerfile frontend
+          docker build --build-arg VITE_API_URL=${BACKEND_URL} -t ${IMAGE} -f frontend/Dockerfile frontend
           docker push ${IMAGE}
 
       - name: Deploy frontend to Cloud Run
