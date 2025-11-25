@@ -10,7 +10,8 @@ import styles from './LoginForm.module.css';
 const LoginForm = ({ authServiceProp = null, authHook = null }) => {
   const navigate = useNavigate();
   // Allow injection of a mock auth hook for tests; fall back to real hook
-  const auth = authHook || useAuth();
+  const realAuth = useAuth();
+  const auth = authHook || realAuth;
   const { login, setAuthError } = auth;
 
   const [formData, setFormData] = useState({
